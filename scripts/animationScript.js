@@ -6,7 +6,7 @@ var TYPE;
 var type;
 $('#btn-start-animation').on('click', function () {
   type = $( "#selectAnimation" ).val();
-  console.log(type);
+  //console.log(type);
   Start(type);
 });
 /*
@@ -243,6 +243,16 @@ type3Ellipse = new THREE.Line(
     new THREE.LineBasicMaterial( { color : 'green'} )
 );
 
+// Ceres to Mars orbit
+var type4Curve = new THREE.EllipseCurve(0, -93.08349, 307.211829, 321.004118  ,0,2*Math.PI,false);
+var type4Path = new THREE.Path(type4Curve.getPoints(2000));
+var type4Geo = type4Path.createPointsGeometry( 50 );
+
+type4Ellipse = new THREE.Line(
+    type4Geo,
+    new THREE.LineBasicMaterial( { color : 'lightblue'} )
+);
+
 
 // светлина
 var light = new THREE.PointLight();
@@ -292,8 +302,8 @@ function animate(){
   var t = clock.getElapsedTime();
   var v;
   var dif1, dif, dif2, dif3, dif4;
-  console.log("type: ");
-  console.log(TYPE);
+  //console.log("type: ");
+  //console.log(TYPE);
   if(TYPE == 2){
     venus.scale.set(2.5, 2.5, 2.5);
     scene.add(type2Ellipse);
@@ -307,7 +317,7 @@ function animate(){
         v = earthPath.getPoint(((t - dif2 + EARTH_PERIOD*0.25)%(EARTH_PERIOD))/(EARTH_PERIOD));
         venus.position.set(v.x, 0, v.y);
       } else {
-        console.log(dif1);
+        //console.log(dif1);
 
         v = type2Path.getPoint(((t - dif1 + EARTH_PERIOD*0.79*0.75)%(EARTH_PERIOD*0.79))/(EARTH_PERIOD*0.79));
         venus.position.set(v.x, 0, v.y);
@@ -373,24 +383,79 @@ function animate(){
         mars.position.set(v.x, 0, v.y);
       }
 
-    } else {
+      v = mercuryPath.getPoint((t%(EARTH_PERIOD*0.241))/(EARTH_PERIOD*0.241));
+      mercury.position.set(v.x, 0, v.y);
+
       v = venusPath.getPoint((t%(EARTH_PERIOD*0.615))/(EARTH_PERIOD*0.615));
       venus.position.set(v.x, 0, v.y);
+
+      v = earthPath.getPoint((t%EARTH_PERIOD)/EARTH_PERIOD);
+      earth.position.set(v.x, 0, v.y);
+
+      v = ceresPath.getPoint((t%(EARTH_PERIOD*4.60))/(EARTH_PERIOD*4.60));
+      ceres.position.set(v.x, 0, v.y);
+
+      v = jupiterPath.getPoint((t%(EARTH_PERIOD*11.86))/(EARTH_PERIOD*11.86));
+      jupiter.position.set(v.x, 0, v.y);
+
+    } else {
+      if(TYPE == 4){
+
+        ceres.scale.set(2.5, 2.5, 2.5);
+        scene.add(type4Ellipse);
+        type4Ellipse.rotation.set(Math.PI/2, 0, 0);
+
+        var shiftT = t + EARTH_PERIOD*0.5*4.6;
+        if(shiftT /(EARTH_PERIOD*4.6) > 0.75){
+
+          dif1 = 0.75*4.6*EARTH_PERIOD;
+          if((shiftT - dif1 + EARTH_PERIOD*3.14324*0.75)/(EARTH_PERIOD*3.14324) > 1.25 ){
+            dif2 = 1.25*EARTH_PERIOD*3.14324 + dif1 - EARTH_PERIOD*3.14324*0.75;
+            v = marsPath.getPoint(((shiftT- dif2 + EARTH_PERIOD*0.25*1.881)%(EARTH_PERIOD*1.881))/(EARTH_PERIOD*1.881));
+            ceres.position.set(v.x, 0, v.y);
+          } else {
+            v = type4Path.getPoint(((shiftT- dif1 + EARTH_PERIOD*3.14324*0.75)%(EARTH_PERIOD*3.14324))/(EARTH_PERIOD*3.14324));
+            ceres.position.set(v.x, 0, v.y);
+          }
+        } else {
+          v = ceresPath.getPoint((shiftT%(EARTH_PERIOD*4.6))/(EARTH_PERIOD*4.6));
+          ceres.position.set(v.x, 0, v.y);
+        }
+        v = mercuryPath.getPoint((t%(EARTH_PERIOD*0.241))/(EARTH_PERIOD*0.241));
+        mercury.position.set(v.x, 0, v.y);
+
+        v = venusPath.getPoint((t%(EARTH_PERIOD*0.615))/(EARTH_PERIOD*0.615));
+        venus.position.set(v.x, 0, v.y);
+
+        v = marsPath.getPoint((t%(EARTH_PERIOD*1.881))/(EARTH_PERIOD*1.881));
+        mars.position.set(v.x, 0, v.y);
+
+        v = earthPath.getPoint((t%EARTH_PERIOD)/EARTH_PERIOD);
+        earth.position.set(v.x, 0, v.y);
+
+        v = jupiterPath.getPoint((t%(EARTH_PERIOD*11.86))/(EARTH_PERIOD*11.86));
+        jupiter.position.set(v.x, 0, v.y);
+
+      } else {
+        v = mercuryPath.getPoint((t%(EARTH_PERIOD*0.241))/(EARTH_PERIOD*0.241));
+        mercury.position.set(v.x, 0, v.y);
+
+        v = venusPath.getPoint((t%(EARTH_PERIOD*0.615))/(EARTH_PERIOD*0.615));
+        venus.position.set(v.x, 0, v.y);
+
+        v = marsPath.getPoint((t%(EARTH_PERIOD*1.881))/(EARTH_PERIOD*1.881));
+        mars.position.set(v.x, 0, v.y);
+
+        v = earthPath.getPoint((t%EARTH_PERIOD)/EARTH_PERIOD);
+        earth.position.set(v.x, 0, v.y);
+
+        v = ceresPath.getPoint((t%(EARTH_PERIOD*4.60))/(EARTH_PERIOD*4.60));
+        ceres.position.set(v.x, 0, v.y);
+
+        v = jupiterPath.getPoint((t%(EARTH_PERIOD*11.86))/(EARTH_PERIOD*11.86));
+        jupiter.position.set(v.x, 0, v.y);
+      }
     }
-    v = mercuryPath.getPoint((t%(EARTH_PERIOD*0.241))/(EARTH_PERIOD*0.241));
-    mercury.position.set(v.x, 0, v.y);
-
-    v = venusPath.getPoint((t%(EARTH_PERIOD*0.615))/(EARTH_PERIOD*0.615));
-    venus.position.set(v.x, 0, v.y);
-
-    v = earthPath.getPoint((t%EARTH_PERIOD)/EARTH_PERIOD);
-    earth.position.set(v.x, 0, v.y);
-
-    v = ceresPath.getPoint((t%(EARTH_PERIOD*4.60))/(EARTH_PERIOD*4.60));
-    ceres.position.set(v.x, 0, v.y);
-
-    v = jupiterPath.getPoint((t%(EARTH_PERIOD*11.86))/(EARTH_PERIOD*11.86));
-    jupiter.position.set(v.x, 0, v.y);
   }
   controls.update();
   renderer.render( scene, camera );
@@ -401,12 +466,27 @@ var isPaused;
 function Start(type)
 {
     TYPE = type;
-    console.log(type);
+
     isPaused = false;
     mars.scale.set(1, 1, 1);
     venus.scale.set(1, 1, 1);
+    ceres.scale.set(1, 1, 1);
     scene.remove(type2Ellipse);
     scene.remove(type3Ellipse);
+    scene.remove(type4Ellipse);
+
+    
+    if(TYPE == 2){
+      camera.position.set(0,700,0);
+    }
+
+    if(TYPE == 3){
+      camera.position.set(0,950,0);
+    }
+
+    if(TYPE == 4){
+      camera.position.set(0,1650,0);
+    }
     clock.start();
     animate();
 
